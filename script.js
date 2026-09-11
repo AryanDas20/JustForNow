@@ -138,7 +138,7 @@ function renderBoard(){
   let visible = posts.filter(p => {
     if(typeFilter !== "all" && p.type !== typeFilter) return false;
     if(catFilter !== "All" && p.cat !== catFilter) return false;
-    if(q && !(p.item.toLowerCase().includes(q) || p.note.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q))) return false;
+    if(q && !(p.item.toLowerCase().includes(q) || p.note.toLowerCase().includes(q) || p.cat.toLowerCase().includes(q) || (p.phone && p.phone.toLowerCase().includes(q)) || (p.email && p.email.toLowerCase().includes(q)))) return false;
     return true;
   });
 
@@ -176,6 +176,10 @@ function renderBoard(){
         <p class="note-cat">${escapeHtml(p.cat)} &middot; ${escapeHtml(p.time || "flexible timing")}</p>
       </div>
       <p class="note-msg">${escapeHtml(p.note || "")}</p>
+      <div class="note-contact">
+        <span><strong>Phone:</strong> <a href="tel:${escapeHtml(p.phone || '')}">${escapeHtml(p.phone || 'N/A')}</a></span>
+        <span><strong>Email:</strong> <a href="mailto:${escapeHtml(p.email || '')}">${escapeHtml(p.email || 'N/A')}</a></span>
+      </div>
       <div class="note-foot">
         <span class="note-who">Posted by <strong>${escapeHtml(p.name)}</strong> &middot; ${escapeHtml(p.room)}</span>
         ${p.resolved
@@ -266,14 +270,16 @@ async function submitPost(){
 
   const item = document.getElementById("f-item").value.trim();
   const room = document.getElementById("f-room").value.trim();
+  const phone = document.getElementById("f-phone").value.trim();
+  const email = document.getElementById("f-email").value.trim();
   const cat = document.getElementById("f-cat").value;
   const time = document.getElementById("f-time").value.trim();
   const note = document.getElementById("f-note").value.trim();
   const pin = document.getElementById("f-pin").value.trim();
   const type = document.querySelector('input[name="ptype"]:checked').value;
 
-  if(!item || !room || !pin){
-    showToast("Fill in item, room, and deletion PIN.");
+  if(!item || !room || !phone || !email || !pin){
+    showToast("Fill in item, room, phone, email, and deletion PIN.");
     return;
   }
 
@@ -289,6 +295,8 @@ async function submitPost(){
         note,
         name: currentUser.name,
         room,
+        phone,
+        email,
         pin
       })
     });
@@ -296,6 +304,8 @@ async function submitPost(){
     if(json.success){
       document.getElementById("f-item").value = "";
       document.getElementById("f-room").value = "";
+      document.getElementById("f-phone").value = "";
+      document.getElementById("f-email").value = "";
       document.getElementById("f-time").value = "";
       document.getElementById("f-note").value = "";
       document.getElementById("f-pin").value = "";

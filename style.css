@@ -228,6 +228,18 @@ header p{
 .note-title{font-size:1.15rem;font-weight:600;margin:0;color:var(--ink);line-height:1.25;}
 .note-cat{font-size:.75rem;color:var(--ink-soft);font-weight:600;}
 .note-msg{font-size:.87rem;color:var(--ink-soft);line-height:1.45;flex:1;}
+.note-contact{
+  font-size:.78rem;
+  color:var(--ink-soft);
+  background:rgba(255,255,255,.4);
+  padding:6px 8px;
+  border-radius:6px;
+  display:flex;
+  flex-direction:column;
+  gap:2px;
+}
+.note-contact a{color:var(--ink);font-weight:600;text-decoration:none;}
+.note-contact a:hover{text-decoration:underline;}
 .note-foot{
   display:flex;
   justify-content:space-between;

@@ -25,6 +25,8 @@ try {
         note TEXT,
         name TEXT NOT NULL,
         room TEXT NOT NULL,
+        phone TEXT NOT NULL,
+        email TEXT NOT NULL,
         pin TEXT NOT NULL,
         resolved INTEGER DEFAULT 0,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP
@@ -77,7 +79,7 @@ if ($action === 'login') {
 
 // Fetch Board Items
 if ($action === 'fetch') {
-    $stmt = $db->query("SELECT id, type, item, cat, time, note, name, room, resolved FROM posts ORDER BY resolved ASC, id DESC");
+    $stmt = $db->query("SELECT id, type, item, cat, time, note, name, room, phone, email, resolved FROM posts ORDER BY resolved ASC, id DESC");
     $posts = $stmt->fetchAll(PDO::FETCH_ASSOC);
     foreach ($posts as &$post) {
         $post['resolved'] = (bool)$post['resolved'];
@@ -91,21 +93,23 @@ if ($action === 'fetch') {
 if ($action === 'create') {
     $input = json_decode(file_get_contents('php://input'), true);
     
-    if (!$input || empty($input['item']) || empty($input['name']) || empty($input['room']) || empty($input['pin'])) {
+    if (!$input || empty($input['item']) || empty($input['name']) || empty($input['room']) || empty($input['phone']) || empty($input['email']) || empty($input['pin'])) {
         echo json_encode(['success' => false, 'error' => 'Missing required fields.']);
         exit;
     }
 
-    $stmt = $db->prepare("INSERT INTO posts (type, item, cat, time, note, name, room, pin) VALUES (:type, :item, :cat, :time, :note, :name, :room, :pin)");
+    $stmt = $db->prepare("INSERT INTO posts (type, item, cat, time, note, name, room, phone, email, pin) VALUES (:type, :item, :cat, :time, :note, :name, :room, :phone, :email, :pin)");
     $result = $stmt->execute([
-        ':type' => $input['type'],
-        ':item' => $input['item'],
-        ':cat'  => $input['cat'],
-        ':time' => $input['time'],
-        ':note' => $input['note'],
-        ':name' => $input['name'],
-        ':room' => $input['room'],
-        ':pin'  => password_hash($input['pin'], PASSWORD_BCRYPT)
+        ':type'  => $input['type'],
+        ':item'  => $input['item'],
+        ':cat'   => $input['cat'],
+        ':time'  => $input['time'],
+        ':note'  => $input['note'],
+        ':name'  => $input['name'],
+        ':room'  => $input['room'],
+        ':phone' => $input['phone'],
+        ':email' => $input['email'],
+        ':pin'   => password_hash($input['pin'], PASSWORD_BCRYPT)
     ]);
 
     echo json_encode(['success' => $result]);
