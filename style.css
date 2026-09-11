@@ -321,6 +321,50 @@ header p{
 .step h3{margin:0 0 6px;font-size:1.02rem;color:var(--ink);}
 .step p{margin:0;font-size:.87rem;color:var(--ink-soft);line-height:1.5;}
 
+/* ---------- about ---------- */
+.about{
+  background:var(--wood-dark);
+  padding:60px 6vw;
+  border-top:6px solid var(--cork-dark);
+}
+.about-inner{max-width:1200px;margin:0 auto;}
+.about h2{font-size:1.7rem;margin:0 0 8px;color:var(--paper);}
+.about > .about-inner > p{color:#cdbb9e;margin:0 0 34px;max-width:60ch;}
+
+.team-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+  gap:26px;
+}
+.team-card{
+  background:#2f2214;
+  border:1px solid #4a3a24;
+  border-radius:12px;
+  padding:24px 20px;
+  text-align:center;
+}
+.team-avatar{
+  width:52px;height:52px;
+  margin:0 auto 14px;
+  border-radius:50%;
+  background:var(--cork-dark);
+  color:var(--wood-dark);
+  display:flex;align-items:center;justify-content:center;
+  font-weight:700;font-size:1.05rem;
+  font-family:'Fredoka',sans-serif;
+}
+.team-card h3{margin:0 0 4px;font-size:1.05rem;color:var(--paper);}
+.team-role{margin:0 0 10px;font-size:.82rem;color:#cdbb9e;font-weight:600;}
+.team-email{
+  display:inline-block;
+  margin-top:4px;
+  font-size:.82rem;
+  color:#ffd27a;
+  text-decoration:none;
+  word-break:break-all;
+}
+.team-email:hover{text-decoration:underline;}
+
 footer{
   background:var(--wood-dark);
   color:#9c8a6d;
