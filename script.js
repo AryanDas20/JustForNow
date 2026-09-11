@@ -1,6 +1,15 @@
 const CATEGORIES = ["All","Electronics","Tools","Formal wear","Kitchen","Sports","Books & notes","Other"];
 
-let posts = [];
+let posts = [
+  {id:1, type:"need", item:"Scientific calculator", cat:"Electronics", time:"by 2:30pm today", note:"Stats exam and mine just died. Return right after.", name:"Priya", room:"LPU 214", resolved:false},
+  {id:2, type:"lend", item:"Bike pump", cat:"Tools", time:"available all week", note:"Floor pump, works on both valve types.", name:"Pratik", room:"LPU 108", resolved:false},
+  {id:3, type:"need", item:"HDMI cable", cat:"Electronics", time:"tonight, 7-9pm", note:"Hooking my laptop to the common room TV for a group watch.", name:"Sourik", room:"LPU 301", resolved:false},
+  {id:4, type:"lend", item:"Travel iron", cat:"Formal wear", time:"available weekends", note:"Small travel one, good for a quick de-wrinkle before formals.", name:"Harshit", room:"LPU 219", resolved:false},
+  {id:5, type:"lend", item:"Phone charger (USB-C, fast)", cat:"Electronics", time:"available now", note:"Extra one I never use, happy to lend for a day.", name:"Chandan", room:"LPU 112", resolved:false},
+  {id:6, type:"need", item:"Badminton racket (x2)", cat:"Sports", time:"this Saturday afternoon", note:"Playing with my roommate, don't own our own set yet.", name:"Aryan", room:"LPU 227", resolved:false},
+  {id:7, type:"lend", item:"Mini whisk + mixing bowl", cat:"Kitchen", time:"available anytime", note:"Baking supplies from a phase I'm past. Come grab 'em.", name:"Manas", room:"LPU 305", resolved:false},
+  {id:8, type:"need", item:"Steam iron", cat:"Formal wear", time:"tomorrow morning", note:"Formal tonight and my shirt looks like I slept in it. (I did.)", name:"Priyam", room:"LPU 118", resolved:false},
+];
 let typeFilter = "all";
 let catFilter = "All";
 let currentUser = null;
