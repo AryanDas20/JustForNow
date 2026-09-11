@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JustforNOW — borrow stuff from your dorm</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <div>
+    <div class="brand"><span class="pinmark"></span>JustforNOW</div>
+    <p>LPU</p>
+  </div>
+  <div class="header-right">
+    <div id="auth-container">
+      <button class="btn btn-ghost" onclick="openAuthModal('login')">Log In</button>
+      <button class="btn btn-primary" onclick="openAuthModal('signup')">Sign Up</button>
+    </div>
+    <div id="user-profile" style="display: none;">
+      Posting as <strong id="whoami">Guest</strong>
+      <button class="btn-logout" onclick="logout()">Logout</button>
+    </div>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="hero-inner">
+    <h1>Need a straightener for <span class="hl">twenty minutes</span>, not a hundred dollars?</h1>
+    <p>JustforNOW is where your dorm lends stuff to itself. Post what you need or what's collecting dust in your closet, and find it three doors down instead of buying it new.</p>
+    <div class="hero-actions">
+      <button class="btn btn-primary" onclick="scrollToBoard()">Browse the board</button>
+      <button class="btn btn-ghost" onclick="checkAuthAndOpenModal()">Post something</button>
+    </div>
+  </div>
+</section>
+
+<main class="board-wrap" id="board-section">
+  <div class="controls">
+    <div class="search-box">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input id="search" type="text" placeholder="Search for a calculator, iron, HDMI cable…" oninput="renderBoard()">
+    </div>
+    <div class="type-toggle">
+      <button class="chip active" data-type="all" onclick="setTypeFilter('all')">All</button>
+      <button class="chip need" data-type="need" onclick="setTypeFilter('need')">Needed</button>
+      <button class="chip lend" data-type="lend" onclick="setTypeFilter('lend')">Up for lending</button>
+    </div>
+    <button class="post-btn" onclick="checkAuthAndOpenModal()">
+      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+      Post something
+    </button>
+  </div>
+
+  <div class="controls" style="margin-top:-14px;">
+    <div class="chip-row" id="category-chips"></div>
+  </div>
+
+  <p class="board-meta" id="board-meta"></p>
+
+  <div class="board" id="board"></div>
+</main>
+
+<section class="how">
+  <div class="how-inner">
+    <h2>How the board works</h2>
+    <p>Create an account, pin notes, and connect with people down the hall.</p>
+    <div class="steps">
+      <div class="step">
+        <div class="num">1</div>
+        <h3>Pin a note</h3>
+        <p>Say what you need or have to lend. Add your dorm and room so neighbors can find you.</p>
+      </div>
+      <div class="step">
+        <div class="num">2</div>
+        <h3>Someone spots it</h3>
+        <p>A neighbor scrolling the board sees your note and taps "I can help" or "I need this."</p>
+      </div>
+      <div class="step">
+        <div class="num">3</div>
+        <h3>Hand it off, hand it back</h3>
+        <p>You meet up, borrow the thing, return it later. Mark the note resolved when done.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  Corkboard — a dorm project. Be kind, return what you borrow.
+</footer>
+
+<!-- Authentication Modal -->
+<div class="overlay" id="auth-overlay">
+  <div class="modal">
+    <h2 id="auth-title">Log In</h2>
+    <p class="sub">Access your account to pin notes to the board.</p>
+
+    <div class="field">
+      <label for="auth-username">Username</label>
+      <input id="auth-username" type="text" placeholder="e.g. Alex123">
+    </div>
+
+    <div class="field">
+      <label for="auth-password">Password</label>
+      <input id="auth-password" type="password" placeholder="••••••••">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeAuthModal()">Cancel</button>
+      <button class="btn btn-primary" id="auth-submit-btn" onclick="handleAuthSubmit()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Pin Modal -->
+<div class="overlay" id="overlay">
+  <div class="modal">
+    <h2>Pin a new note</h2>
+    <p class="sub">Takes about 20 seconds.</p>
+
+    <div class="type-pick">
+      <label class="opt-need"><input type="radio" name="ptype" value="need" checked><span>I need something</span></label>
+      <label class="opt-lend"><input type="radio" name="ptype" value="lend"><span>I have something to lend</span></label>
+    </div>
+
+    <div class="field">
+      <label for="f-item">What is it?</label>
+      <input id="f-item" type="text" placeholder="e.g. Scientific calculator (TI-84)">
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="f-cat">Category</label>
+        <select id="f-cat">
+          <option>Electronics</option>
+          <option>Tools</option>
+          <option>Formal wear</option>
+          <option>Kitchen</option>
+          <option>Sports</option>
+          <option>Books &amp; notes</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label for="f-time">Needed by / available</label>
+        <input id="f-time" type="text" placeholder="e.g. by 3pm today">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-note">A line of detail (optional)</label>
+      <textarea id="f-note" placeholder="e.g. Just need it for one lab practical, will return same day."></textarea>
+    </div>
+
+    <div class="field-row">
+      <div class="field">
+        <label for="f-name">Account User</label>
+        <input id="f-name" type="text" readonly style="background:#eee; cursor:not-allowed;">
+      </div>
+      <div class="field">
+        <label for="f-room">Dorm &amp; room</label>
+        <input id="f-room" type="text" placeholder="e.g. Maple 214">
+      </div>
+    </div>
+
+    <div class="field">
+      <label for="f-pin">Set a Deletion PIN Password</label>
+      <input id="f-pin" type="password" maxlength="8" placeholder="e.g. 1234 (used to delete this note later)">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="submitPost()">Pin it to the board</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
